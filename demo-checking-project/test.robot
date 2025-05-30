@@ -1,18 +1,17 @@
-Library    SeleniumLibrary
+*** Settings ***
+Library           SeleniumLibrary
 
 *** Variables ***
-${URL}    https://example.com
+${URL}            https://www.google.com
+${BROWSER}        Chrome
+${SEARCH_TERM}    Robot Framework
 
 *** Test Cases ***
-Open Browser to Example
-    Open Browser    ${URL}    chrome
-    Title Should Be    Example Domain
-    [Teardown]    Close Browser
-
-Verify Example Content
-    [Setup]    Open Browser to Example
-    Element Should Be Visible    xpath://h1[contains(text(), 'Example Domain')]
-    [Teardown]    Close Browser
-
-Verify Example Content1    
-    Log To Console    Example Domain
+Search in Google and Verify Results
+    [Documentation]    Opens Google, searches for a term, and verifies results appear.
+    Open Browser    ${URL}    ${BROWSER}
+    Input Text      name=q    ${SEARCH_TERM}
+    Press Keys      name=q    \\13
+    Wait Until Page Contains Element    xpath=//h3    timeout=10s
+    Page Should Contain Element    xpath=//h3
+    Close Browser
